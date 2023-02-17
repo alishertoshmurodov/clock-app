@@ -1,14 +1,22 @@
-let ip = '';
+let timezone = ''
 
 const bodyEl = document.querySelector('body');
 
 window.addEventListener('load', function (e) {
     bodyEl.classList.remove('not-loaded');
 
-    fetch('http://worldtimeapi.org/api/ip')
+
+    fetch(`https://api.ipgeolocation.io/ipgeo?apiKey=30f072f1bd0d4055a9b9d3bf7efc2aa3`)
         .then((response) => response.json())
         .then((data) => {
-            let time = data.datetime.slice(11, 16);
+            timezone = data.time_zone.name
+            document.querySelector('.app-container__clock-location #location').textContent = data.city + ', ' + data.country_name;
+        })
+
+    fetch(`https://api.ipgeolocation.io/timezone?apiKey=30f072f1bd0d4055a9b9d3bf7efc2aa3&tz=${timezone}`)
+        .then((response) => response.json())
+        .then((data) => {
+            let time = data.date_time.slice(11, 16);
             let hours = time.slice(0, 2);
 
             // greeting change
@@ -34,21 +42,18 @@ window.addEventListener('load', function (e) {
             }
 
             // More section
-
+            const dayOfYear = date =>
+                Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+            let dayYear = dayOfYear(new Date())
+            console.log(data);
             document.querySelector('#timezone').textContent = data.timezone;
-            document.querySelector('#yearDay').textContent = data.day_of_year;
-            document.querySelector('#weekDay').textContent = data.day_of_week;
-            document.querySelector('#weekNumber').textContent = data.week_number;
+            document.querySelector('#yearDay').textContent = dayYear;
+            document.querySelector('#weekDay').textContent = data.date_time_txt.split(',')[0];
+            document.querySelector('#weekNumber').textContent = data.week;
 
             ip = data.client_ip
             document.querySelector('.app-container__clock-time h1').textContent = time;
         });
-
-    fetch(`https://api.ipgeolocation.io/ipgeo?apiKey=30f072f1bd0d4055a9b9d3bf7efc2aa3&ip=${ip}`)
-        .then((response) => response.json())
-        .then((data) => {
-            document.querySelector('.app-container__clock-location #location').textContent = data.city + ', ' + data.country_name;
-        })
 
     fetch('https://api.quotable.io/random/')
         .then((response) => response.json())
