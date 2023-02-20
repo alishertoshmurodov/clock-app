@@ -41,15 +41,18 @@ body {
   display: grid;
   align-items: center;
   grid-template-columns: 1fr;
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-rows: 1fr 1fr 0fr;
+  transition: 300ms ease;
   max-width: 1110px;
   margin-inline: auto;
+  transition: 300ms;
   padding: 2rem 1rem;
   &__quote {
     display: flex;
     align-items: baseline;
     gap: 1rem;
     max-width: 575px;
+    transition: 300ms;
     justify-content: space-between;
     #quote-author {
       @include h5;
@@ -67,6 +70,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    transition: 300ms;
   }
   &__clock-box {
     max-width: 575px;
@@ -124,9 +128,11 @@ body {
     z-index: 1;
   }
   .more-background {
+    transition: 300ms;
+    transform: translateY(50vh);
     position: absolute;
     width: 100vw;
-    height: 50vh;
+    height: 0;
     left: 0;
     top: 50%;
     background: rgba(255, 255, 255, 0.75);
@@ -140,6 +146,7 @@ body {
     }
   }
   &__more-container {
+    transition: 300ms;
     display: grid;
     gap: 5rem;
     grid-template-columns: repeat(2, 1fr);
@@ -159,7 +166,8 @@ body {
 }
 
 .hidden {
-  display: none;
+  height: 0px;
+  overflow: hidden;
 }
 
 .expanded {
