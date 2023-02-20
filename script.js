@@ -83,13 +83,17 @@ window.addEventListener('load', function (e) {
         if (moreSection.classList.contains('hidden')) {
             moreSection.classList.remove('hidden');
             moreSection.classList.add('expanded');
-            quoteSection.classList.add('hidden');
+            document.querySelector('.app-container').style = 'grid-template-rows: 0fr 1fr 1fr';
+            quoteSection.style = 'height: 0px; overflow:hidden';
+            document.querySelector('.more-background').style = 'height: 50vh; transform: translateY(0)';
             buttonArrowEl.classList.add('arrow-rotate');
             arrowBtnEl.querySelector('span').textContent = 'less';
         } else {
             moreSection.classList.remove('expanded');
             moreSection.classList.add('hidden');
-            quoteSection.classList.remove('hidden');
+            document.querySelector('.app-container').removeAttribute('style');
+            quoteSection.removeAttribute('style');
+            document.querySelector('.more-background').removeAttribute('style');
             buttonArrowEl.classList.remove('arrow-rotate');
             arrowBtnEl.querySelector('span').textContent = 'more';
         }
