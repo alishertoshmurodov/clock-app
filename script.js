@@ -35,10 +35,13 @@ window.addEventListener('load', function (e) {
                 document.querySelector('.app-container__clock-heading span:first-child').style = 'width: 24px; height: 24px; background-image: url(assets/images/icon-sun.svg); background-repeat: no-repeat; display: inline-block; margin-inline: 10px';
                 document.querySelector('.overlay').style = 'background-image: url(assets/images/bg-image-daytime.jpg)';
                 document.querySelector('.more-background').classList.remove('more-background-night');
+                document.querySelectorAll('.app-container__more-container-item').forEach((item) => item.removeAttribute('style')) ;
             } else {
                 document.querySelector('.app-container__clock-heading span:first-child').style = 'width: 24px; height: 24px; background-image: url(assets/images/icon-moon.svg); background-repeat: no-repeat; display: inline-block; margin-inline: 10px';
                 document.querySelector('.overlay').style = 'background-image: url(assets/images/bg-image-nighttime.jpg)';
                 document.querySelector('.more-background').classList.add('more-background-night');
+                document.querySelectorAll('.app-container__more-container-item').forEach((item) => item.style = 'color: #ffffff !important') ;
+
             }
 
             // More section

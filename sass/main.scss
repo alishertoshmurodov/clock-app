@@ -195,10 +195,6 @@ body {
     align-items: flex-start;
   }
 
-  body {
-    overflow: unset;
-  }
-
   .app-container__more-container {
     gap: 2rem;
   }
@@ -245,10 +241,9 @@ body {
     gap: unset;
   }
   .app-container {
-    grid-template-rows: 60% 1fr;
+    grid-template-rows: 0fr 60% 1fr;
   }
   .app-container .more-background {
     height: 40vh;
-    top: 60%;
   }
 }
