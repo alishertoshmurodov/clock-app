@@ -16,9 +16,13 @@ window.addEventListener('load', function (e) {
     fetch(`https://api.ipgeolocation.io/timezone?apiKey=30f072f1bd0d4055a9b9d3bf7efc2aa3&tz=${timezone}`)
         .then((response) => response.json())
         .then((data) => {
-            let time = data.date_time.slice(11, 16);
-            let hours = time.slice(0, 2);
+            let dateFull = new Date(data.date_time_txt);
+            console.log(data);
+            let hours = dateFull.getHours();
+            let seconds = dateFull.getSeconds();
 
+            console.log(dateFull.getHours(), dateFull.getMinutes());
+            console.log(data.date_time_txt);
             // greeting change
 
             if (Number(hours) > 4 && Number(hours) < 12) {
@@ -35,12 +39,12 @@ window.addEventListener('load', function (e) {
                 document.querySelector('.app-container__clock-heading span:first-child').style = 'width: 24px; height: 24px; background-image: url(assets/images/icon-sun.svg); background-repeat: no-repeat; display: inline-block; margin-inline: 10px';
                 document.querySelector('.overlay').style = 'background-image: url(assets/images/bg-image-daytime.jpg)';
                 document.querySelector('.more-background').classList.remove('more-background-night');
-                document.querySelectorAll('.app-container__more-container-item').forEach((item) => item.removeAttribute('style')) ;
+                document.querySelectorAll('.app-container__more-container-item').forEach((item) => item.removeAttribute('style'));
             } else {
                 document.querySelector('.app-container__clock-heading span:first-child').style = 'width: 24px; height: 24px; background-image: url(assets/images/icon-moon.svg); background-repeat: no-repeat; display: inline-block; margin-inline: 10px';
                 document.querySelector('.overlay').style = 'background-image: url(assets/images/bg-image-nighttime.jpg)';
                 document.querySelector('.more-background').classList.add('more-background-night');
-                document.querySelectorAll('.app-container__more-container-item').forEach((item) => item.style = 'color: #ffffff !important') ;
+                document.querySelectorAll('.app-container__more-container-item').forEach((item) => item.style = 'color: #ffffff !important');
 
             }
 
@@ -48,14 +52,23 @@ window.addEventListener('load', function (e) {
             const dayOfYear = date =>
                 Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
             let dayYear = dayOfYear(new Date())
-            console.log(data);
+
             document.querySelector('#timezone').textContent = data.timezone;
             document.querySelector('#yearDay').textContent = dayYear;
             document.querySelector('#weekDay').textContent = data.date_time_txt.split(',')[0];
             document.querySelector('#weekNumber').textContent = data.week;
 
             ip = data.client_ip
-            document.querySelector('.app-container__clock-time h1').textContent = time;
+
+            setInterval(() => {
+                console.log(dateFull.getMinutes(), dateFull.getSeconds());
+                let time = `${dateFull.getHours()}:${dateFull.getMinutes()}`;
+                document.querySelector('.app-container__clock-time h1').textContent = time;
+                
+                dateFull.setSeconds(seconds);
+                seconds++;
+            }, 1000);
+            
         });
 
     fetch('https://api.quotable.io/random/')
