@@ -83,6 +83,11 @@ body {
     }
   }
   &__clock-time {
+    display: flex;
+    align-items: center;
+    span {
+      @include h4;
+    }
     h1 {
       @include h1;
     }

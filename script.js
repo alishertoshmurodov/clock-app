@@ -16,59 +16,73 @@ window.addEventListener('load', function (e) {
     fetch(`https://api.ipgeolocation.io/timezone?apiKey=30f072f1bd0d4055a9b9d3bf7efc2aa3&tz=${timezone}`)
         .then((response) => response.json())
         .then((data) => {
-            let dateFull = new Date(data.date_time_txt);
-            console.log(data);
-            let hours = dateFull.getHours();
-            let seconds = dateFull.getSeconds();
 
-            console.log(dateFull.getHours(), dateFull.getMinutes());
-            console.log(data.date_time_txt);
-            // greeting change
 
-            if (Number(hours) > 4 && Number(hours) < 12) {
-                document.querySelector('.app-container__clock-heading span:nth-child(2)').textContent = 'good morning';
-            } else if (Number(hours) > 11 && Number(hours) < 18) {
-                document.querySelector('.app-container__clock-heading span:nth-child(2)').textContent = 'good afternoon';
-            } else {
-                document.querySelector('.app-container__clock-heading span:nth-child(2)').textContent = 'good evening';
-            }
-
-            // background change
-
-            if (Number(hours) > 4 && Number(hours) < 18) {
-                document.querySelector('.app-container__clock-heading span:first-child').style = 'width: 24px; height: 24px; background-image: url(assets/images/icon-sun.svg); background-repeat: no-repeat; display: inline-block; margin-inline: 10px';
-                document.querySelector('.overlay').style = 'background-image: url(assets/images/bg-image-daytime.jpg)';
-                document.querySelector('.more-background').classList.remove('more-background-night');
-                document.querySelectorAll('.app-container__more-container-item').forEach((item) => item.removeAttribute('style'));
-            } else {
-                document.querySelector('.app-container__clock-heading span:first-child').style = 'width: 24px; height: 24px; background-image: url(assets/images/icon-moon.svg); background-repeat: no-repeat; display: inline-block; margin-inline: 10px';
-                document.querySelector('.overlay').style = 'background-image: url(assets/images/bg-image-nighttime.jpg)';
-                document.querySelector('.more-background').classList.add('more-background-night');
-                document.querySelectorAll('.app-container__more-container-item').forEach((item) => item.style = 'color: #ffffff !important');
-
-            }
-
-            // More section
-            const dayOfYear = date =>
-                Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
-            let dayYear = dayOfYear(new Date())
-
-            document.querySelector('#timezone').textContent = data.timezone;
-            document.querySelector('#yearDay').textContent = dayYear;
-            document.querySelector('#weekDay').textContent = data.date_time_txt.split(',')[0];
-            document.querySelector('#weekNumber').textContent = data.week;
-
-            ip = data.client_ip
 
             setInterval(() => {
-                console.log(dateFull.getMinutes(), dateFull.getSeconds());
-                let time = `${dateFull.getHours()}:${dateFull.getMinutes()}`;
-                document.querySelector('.app-container__clock-time h1').textContent = time;
+
+
+                // 
+                let dateFull = new Date();
+                let timeConvert = dateFull.toLocaleString('en-US', { timeZone: data.timezone });
+                let timeArr = timeConvert.split(' ');
+
+                let hours = timeArr[1].split(':')[0];
+                let minutes = timeArr[1].split(':')[1];
                 
-                dateFull.setSeconds(seconds);
-                seconds++;
+                // greeting change
+               
+
+                if (timeArr[2] == 'AM') {
+                    if (hours >= 4 && hours <= 11) {
+                        document.querySelector('.app-container__clock-heading span:nth-child(2)').textContent = 'good morning';
+                    }
+                    document.querySelector('#AMPM').textContent = timeArr[2];
+                    
+                } else if (timeArr[2] == 'PM') {
+                    if ((hours >= 1 && hours < 6) || hours == 12) {
+                        document.querySelector('.app-container__clock-heading span:nth-child(2)').textContent = 'good afternoon';
+                    }
+                    document.querySelector('#AMPM').textContent = timeArr[2];
+                } 
+                else {
+                    document.querySelector('.app-container__clock-heading span:nth-child(2)').textContent = 'good evening';
+                }
+
+                // background change
+
+                if ((timeArr[2] == 'AM' && (hours > 4 && hours != 12)) || (timeArr[2] == 'PM' && (hours <= 6 & hours != 12)) ){
+                    document.querySelector('.app-container__clock-heading span:first-child').style = 'width: 24px; height: 24px; background-image: url(assets/images/icon-sun.svg); background-repeat: no-repeat; display: inline-block; margin-inline: 10px';
+                    document.querySelector('.overlay').style = 'background-image: url(assets/images/bg-image-daytime.jpg)';
+                    document.querySelector('.more-background').classList.remove('more-background-night');
+                    document.querySelectorAll('.app-container__more-container-item').forEach((item) => item.removeAttribute('style'));
+                } else {
+                    document.querySelector('.app-container__clock-heading span:first-child').style = 'width: 24px; height: 24px; background-image: url(assets/images/icon-moon.svg); background-repeat: no-repeat; display: inline-block; margin-inline: 10px';
+                    document.querySelector('.overlay').style = 'background-image: url(assets/images/bg-image-nighttime.jpg)';
+                    document.querySelector('.more-background').classList.add('more-background-night');
+                    document.querySelectorAll('.app-container__more-container-item').forEach((item) => item.style = 'color: #ffffff !important');
+
+                }
+
+                // More section
+                const dayOfYear = date =>
+                    Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+                let dayYear = dayOfYear(new Date())
+
+                document.querySelector('#timezone').textContent = data.timezone;
+                document.querySelector('#yearDay').textContent = dayYear;
+                document.querySelector('#weekDay').textContent = data.date_time_txt.split(',')[0];
+                document.querySelector('#weekNumber').textContent = data.week;
+
+                ip = data.client_ip
+                // 
+
+
+                let time = `${hours}:${minutes}`;
+                document.querySelector('.app-container__clock-time h1').textContent = time;
+
             }, 1000);
-            
+
         });
 
     fetch('https://api.quotable.io/random/')
